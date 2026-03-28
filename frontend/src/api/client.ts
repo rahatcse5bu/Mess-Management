@@ -4,7 +4,7 @@ import { useAuthStore } from '../store/authStore';
 // Replace with your actual Render backend URL
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ||
   (window.location.origin.includes('vercel.app')
-    ? 'https://your-backend-url.onrender.com'  // Replace this with your actual backend URL
+    ? 'https://mess-management-big3.onrender.com'
     : 'http://localhost:3000');
 
 const api = axios.create({
