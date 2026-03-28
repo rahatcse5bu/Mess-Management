@@ -1,0 +1,34 @@
+# Dependencies
+backend/node_modules/
+frontend/node_modules/
+node_modules/
+
+# Build outputs
+backend/dist/
+frontend/dist/
+build/
+*.log
+
+# Environment variables
+.env
+.env.local
+.env.production
+backend/.env
+frontend/.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Vercel
+.vercel
+
+# Misc
+*.tsbuildinfo
