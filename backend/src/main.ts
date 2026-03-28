@@ -5,9 +5,13 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Enable CORS
+  // Enable CORS - Allow all origins in production or specific origins
+  const allowedOrigins = process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(',')
+    : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3001'];
+
   app.enableCors({
-    origin: ['http://localhost:5173', 'http://localhost:3001'],
+    origin: process.env.NODE_ENV === 'production' ? true : allowedOrigins,
     credentials: true,
   });
 
@@ -24,7 +28,8 @@ async function bootstrap() {
   );
 
   const port = process.env.PORT || 3000;
-  await app.listen(port);
-  console.log(`Application is running on: http://localhost:${port}`);
+  const host = process.env.HOST || '0.0.0.0'; // Bind to 0.0.0.0 for cloud platforms
+  await app.listen(port, host);
+  console.log(`Application is running on: http://${host}:${port}`);
 }
 bootstrap();
