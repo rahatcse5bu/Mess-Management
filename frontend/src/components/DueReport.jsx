@@ -67,8 +67,8 @@ export function DueReportView({ report, isLoading }) {
                                         </span>
                                     </td>
                                     <td className={`px-4 py-4 text-right font-bold ${row.due >= 0
-                                            ? 'text-red-600 bg-red-50'
-                                            : 'text-green-600 bg-green-50'
+                                        ? 'text-red-600 bg-red-50'
+                                        : 'text-green-600 bg-green-50'
                                         }`}>
                                         ₹ {row.due.toFixed(2)}
                                     </td>

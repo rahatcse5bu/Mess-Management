@@ -82,129 +82,129 @@ export function MembersView({ members, onAddMember, onDeleteMember, onEditMember
                 {isLoading ? (
                     <SkeletonTable rows={5} cols={6} />
                 ) : (
-                <div className="overflow-x-auto">
-                    <table className="w-full text-xs sm:text-sm">
-                        <thead className="bg-slate-100 border-b border-slate-200">
-                            <tr>
-                                <th className="text-left px-2 sm:px-4 py-3 font-semibold text-slate-900">Name</th>
-                                <th className="hidden sm:table-cell text-left px-2 sm:px-4 py-3 font-semibold text-slate-900">Email</th>
-                                <th className="hidden md:table-cell text-left px-2 sm:px-4 py-3 font-semibold text-slate-900">Phone</th>
-                                <th className="text-center px-2 sm:px-4 py-3 font-semibold text-slate-900">Cooker</th>
-                                <th className="text-center px-2 sm:px-4 py-3 font-semibold text-slate-900">Status</th>
-                                <th className="text-center px-2 sm:px-4 py-3 font-semibold text-slate-900">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {members.length === 0 ? (
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-xs sm:text-sm">
+                            <thead className="bg-slate-100 border-b border-slate-200">
                                 <tr>
-                                    <td colSpan="6" className="px-4 py-8 text-center text-slate-500">
-                                        No members yet. Add your first member above.
-                                    </td>
+                                    <th className="text-left px-2 sm:px-4 py-3 font-semibold text-slate-900">Name</th>
+                                    <th className="hidden sm:table-cell text-left px-2 sm:px-4 py-3 font-semibold text-slate-900">Email</th>
+                                    <th className="hidden md:table-cell text-left px-2 sm:px-4 py-3 font-semibold text-slate-900">Phone</th>
+                                    <th className="text-center px-2 sm:px-4 py-3 font-semibold text-slate-900">Cooker</th>
+                                    <th className="text-center px-2 sm:px-4 py-3 font-semibold text-slate-900">Status</th>
+                                    <th className="text-center px-2 sm:px-4 py-3 font-semibold text-slate-900">Actions</th>
                                 </tr>
-                            ) : (
-                                members.map((member) => (
-                                    <tr key={member._id} className="border-b border-slate-200 hover:bg-slate-50">
-                                        {editingId === member._id ? (
-                                            <>
-                                                <td className="px-4 py-2">
-                                                    <input
-                                                        className="w-full px-2 py-1 border border-slate-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                        value={editForm.name}
-                                                        onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                                                    />
-                                                </td>
-                                                <td className="px-4 py-2">
-                                                    <input
-                                                        className="w-full px-2 py-1 border border-slate-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                        value={editForm.email}
-                                                        onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                                                    />
-                                                </td>
-                                                <td className="px-4 py-2">
-                                                    <input
-                                                        className="w-full px-2 py-1 border border-slate-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                        value={editForm.phone}
-                                                        onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
-                                                    />
-                                                </td>
-                                                <td className="px-4 py-2 text-center">
-                                                    <span className={`inline-block px-2 py-1 rounded text-xs font-semibold ${member.isCooker !== false ? 'bg-green-100 text-green-800' : 'bg-slate-100 text-slate-600'}`}>
-                                                        {member.isCooker !== false ? 'Yes' : 'No'}
-                                                    </span>
-                                                </td>
-                                                <td className="px-4 py-2 text-center">
-                                                    <span className={`inline-block px-2 py-1 rounded text-xs font-semibold ${member.isActive !== false ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-700'}`}>
-                                                        {member.isActive !== false ? 'Active' : 'Inactive'}
-                                                    </span>
-                                                </td>
-                                                <td className="px-4 py-2 text-center">
-                                                    <div className="flex justify-center gap-2">
-                                                        <button
-                                                            onClick={() => saveEdit(member._id)}
-                                                            className="px-3 py-1 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-all text-xs font-medium"
-                                                        >
-                                                            Save
-                                                        </button>
-                                                        <button
-                                                            onClick={cancelEdit}
-                                                            className="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-all text-xs font-medium"
-                                                        >
-                                                            Cancel
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <td className="px-4 py-3 font-medium text-slate-900">{member.name}</td>
-                                                <td className="px-4 py-3 text-slate-600">{member.email || '—'}</td>
-                                                <td className="px-4 py-3 text-slate-600">{member.phone || '—'}</td>
-                                                <td className="px-4 py-3 text-center">
-                                                    <button
-                                                        onClick={() => toggleCooker(member)}
-                                                        className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${member.isCooker !== false
-                                                            ? 'bg-green-100 text-green-800 hover:bg-green-200'
-                                                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                                                            }`}
-                                                    >
-                                                        {member.isCooker !== false ? 'Cooker' : 'Non-Cooker'}
-                                                    </button>
-                                                </td>
-                                                <td className="px-4 py-3 text-center">
-                                                    <button
-                                                        onClick={() => toggleActive(member)}
-                                                        className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${member.isActive !== false
-                                                            ? 'bg-green-100 text-green-800 hover:bg-green-200'
-                                                            : 'bg-red-100 text-red-700 hover:bg-red-200'
-                                                            }`}
-                                                    >
-                                                        {member.isActive !== false ? 'Active' : 'Inactive'}
-                                                    </button>
-                                                </td>
-                                                <td className="px-4 py-3 text-center">
-                                                    <div className="flex justify-center gap-2">
-                                                        <button
-                                                            onClick={() => startEdit(member)}
-                                                            className="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-all text-xs font-medium"
-                                                        >
-                                                            Edit
-                                                        </button>
-                                                        <button
-                                                            onClick={() => onDeleteMember(member._id)}
-                                                            className="px-3 py-1 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-all text-xs font-medium"
-                                                        >
-                                                            Delete
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </>
-                                        )}
+                            </thead>
+                            <tbody>
+                                {members.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="6" className="px-4 py-8 text-center text-slate-500">
+                                            No members yet. Add your first member above.
+                                        </td>
                                     </tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
-                </div>
+                                ) : (
+                                    members.map((member) => (
+                                        <tr key={member._id} className="border-b border-slate-200 hover:bg-slate-50">
+                                            {editingId === member._id ? (
+                                                <>
+                                                    <td className="px-4 py-2">
+                                                        <input
+                                                            className="w-full px-2 py-1 border border-slate-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                            value={editForm.name}
+                                                            onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                                                        />
+                                                    </td>
+                                                    <td className="px-4 py-2">
+                                                        <input
+                                                            className="w-full px-2 py-1 border border-slate-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                            value={editForm.email}
+                                                            onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                                                        />
+                                                    </td>
+                                                    <td className="px-4 py-2">
+                                                        <input
+                                                            className="w-full px-2 py-1 border border-slate-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                            value={editForm.phone}
+                                                            onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
+                                                        />
+                                                    </td>
+                                                    <td className="px-4 py-2 text-center">
+                                                        <span className={`inline-block px-2 py-1 rounded text-xs font-semibold ${member.isCooker !== false ? 'bg-green-100 text-green-800' : 'bg-slate-100 text-slate-600'}`}>
+                                                            {member.isCooker !== false ? 'Yes' : 'No'}
+                                                        </span>
+                                                    </td>
+                                                    <td className="px-4 py-2 text-center">
+                                                        <span className={`inline-block px-2 py-1 rounded text-xs font-semibold ${member.isActive !== false ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-700'}`}>
+                                                            {member.isActive !== false ? 'Active' : 'Inactive'}
+                                                        </span>
+                                                    </td>
+                                                    <td className="px-4 py-2 text-center">
+                                                        <div className="flex justify-center gap-2">
+                                                            <button
+                                                                onClick={() => saveEdit(member._id)}
+                                                                className="px-3 py-1 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-all text-xs font-medium"
+                                                            >
+                                                                Save
+                                                            </button>
+                                                            <button
+                                                                onClick={cancelEdit}
+                                                                className="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-all text-xs font-medium"
+                                                            >
+                                                                Cancel
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <td className="px-4 py-3 font-medium text-slate-900">{member.name}</td>
+                                                    <td className="px-4 py-3 text-slate-600">{member.email || '—'}</td>
+                                                    <td className="px-4 py-3 text-slate-600">{member.phone || '—'}</td>
+                                                    <td className="px-4 py-3 text-center">
+                                                        <button
+                                                            onClick={() => toggleCooker(member)}
+                                                            className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${member.isCooker !== false
+                                                                ? 'bg-green-100 text-green-800 hover:bg-green-200'
+                                                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                                                }`}
+                                                        >
+                                                            {member.isCooker !== false ? 'Cooker' : 'Non-Cooker'}
+                                                        </button>
+                                                    </td>
+                                                    <td className="px-4 py-3 text-center">
+                                                        <button
+                                                            onClick={() => toggleActive(member)}
+                                                            className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${member.isActive !== false
+                                                                ? 'bg-green-100 text-green-800 hover:bg-green-200'
+                                                                : 'bg-red-100 text-red-700 hover:bg-red-200'
+                                                                }`}
+                                                        >
+                                                            {member.isActive !== false ? 'Active' : 'Inactive'}
+                                                        </button>
+                                                    </td>
+                                                    <td className="px-4 py-3 text-center">
+                                                        <div className="flex justify-center gap-2">
+                                                            <button
+                                                                onClick={() => startEdit(member)}
+                                                                className="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-all text-xs font-medium"
+                                                            >
+                                                                Edit
+                                                            </button>
+                                                            <button
+                                                                onClick={() => onDeleteMember(member._id)}
+                                                                className="px-3 py-1 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-all text-xs font-medium"
+                                                            >
+                                                                Delete
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </>
+                                            )}
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
                 )}
             </Card>
         </div>
