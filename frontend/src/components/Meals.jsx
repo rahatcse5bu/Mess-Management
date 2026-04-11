@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Card, Header } from './Common';
+import { SkeletonCard } from './Skeleton';
 
-export function MealsView({ members, client, onSubmitMeals }) {
+export function MealsView({ members, client, onSubmitMeals, isLoading }) {
     const [form, setForm] = useState({
         date: new Date().toISOString().slice(0, 10),
         elements: '',

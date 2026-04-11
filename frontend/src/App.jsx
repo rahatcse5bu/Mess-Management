@@ -22,11 +22,13 @@ function App() {
   const [cookForm, setCookForm] = useState({ termDays: 2, memberOrder: [] });
   const [upcoming, setUpcoming] = useState([]);
   const [currentCooker, setCurrentCooker] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const client = useMemo(() => api(token), [token]);
 
   // Load all dashboard data
   const loadDashboard = useCallback(async () => {
+    setIsLoading(true);
     try {
       const [membersRes, cookingRes, configRes, currentRes, purchasesRes, adjustmentsRes, reportRes] = await Promise.all([
         client.get('/members'),
@@ -60,6 +62,8 @@ function App() {
       setUpcoming(configRes.data?.upcoming || []);
     } catch (err) {
       console.error('Failed to load dashboard:', err);
+    } finally {
+      setIsLoading(false);
     }
   }, [client]);
 
@@ -208,13 +212,13 @@ function App() {
 
   // Main dashboard with sidebar
   return (
-    <div className="flex h-screen bg-slate-100">
+    <div className="flex flex-col md:flex-row h-screen bg-slate-100">
       {/* Sidebar */}
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} onLogout={handleLogout} />
 
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto">
-        <div className="p-8 max-w-7xl mx-auto">
+      <main className="flex-1 overflow-y-auto md:pt-0 pt-16">
+        <div className="p-4 md:p-8 max-w-7xl mx-auto w-full">
           {activeTab === 'Dashboard' && (
             <DashboardView
               members={members}
@@ -222,6 +226,7 @@ function App() {
               history={history}
               report={report}
               adjustments={adjustments}
+              isLoading={isLoading}
             />
           )}
 
@@ -231,6 +236,7 @@ function App() {
               onAddMember={handleAddMember}
               onDeleteMember={handleDeleteMember}
               onEditMember={handleEditMember}
+              isLoading={isLoading}
             />
           )}
 
@@ -239,6 +245,7 @@ function App() {
               members={members}
               client={client}
               onSubmitMeals={handleSubmitMeals}
+              isLoading={isLoading}
             />
           )}
 
@@ -247,6 +254,7 @@ function App() {
               purchases={purchases}
               members={members}
               onAddPurchase={handleAddPurchase}
+              isLoading={isLoading}
             />
           )}
 
@@ -261,6 +269,7 @@ function App() {
               onMoveOrder={handleMoveOrder}
               onManualAssign={handleManualAssign}
               onDeleteHistory={handleDeleteCookingHistory}
+              isLoading={isLoading}
             />
           )}
 
@@ -269,11 +278,12 @@ function App() {
               members={members}
               adjustments={adjustments}
               onAddAdjustment={handleAddAdjustment}
+              isLoading={isLoading}
             />
           )}
 
           {activeTab === 'Due Report' && (
-            <DueReportView report={report} />
+            <DueReportView report={report} isLoading={isLoading} />
           )}
         </div>
       </main>

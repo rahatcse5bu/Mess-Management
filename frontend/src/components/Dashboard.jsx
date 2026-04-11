@@ -1,17 +1,36 @@
 import { useState } from 'react';
 import { Card, Button, Header } from './Common';
+import { Skeleton, SkeletonCard, SkeletonStats } from './Skeleton';
 
 export function DashboardView({
     members,
     purchases,
     history,
     report,
-    adjustments
+    adjustments,
+    isLoading
 }) {
     const totalMembers = members.length;
     const totalPurchases = purchases.reduce((sum, p) => sum + (Number(p.amount) || 0), 0);
     const totalMeals = report?.totalMeals || 0;
     const mealRate = report?.mealRate || 0;
+
+    if (isLoading) {
+        return (
+            <div>
+                <Header
+                    title="Dashboard"
+                    subtitle="Key metrics and overview"
+                    icon="📊"
+                />
+                <SkeletonStats />
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+                    <SkeletonCard lines={5} />
+                    <SkeletonCard lines={5} />
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div>
@@ -22,7 +41,7 @@ export function DashboardView({
             />
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <StatCard label="Total Members" value={totalMembers} icon="👥" color="blue" />
                 <StatCard label="Total Purchases" value={`₹ ${totalPurchases.toFixed(0)}`} icon="🛒" color="green" />
                 <StatCard label="Total Meals" value={totalMeals.toFixed(1)} icon="🍽️" color="orange" />
@@ -33,15 +52,15 @@ export function DashboardView({
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Recent Purchases */}
                 <Card>
-                    <h2 className="text-xl font-bold text-slate-900 mb-4">Recent Purchases</h2>
+                    <h2 className="text-lg sm:text-xl font-bold text-slate-900 mb-4">Recent Purchases</h2>
                     <div className="space-y-3">
                         {purchases.slice(0, 5).map((p) => (
                             <div key={p._id} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-                                <div>
-                                    <p className="font-medium text-slate-900">{p.description}</p>
+                                <div className="min-w-0 flex-1">
+                                    <p className="font-medium text-slate-900 truncate">{p.description}</p>
                                     <p className="text-xs text-slate-500">{new Date(p.date).toLocaleDateString()}</p>
                                 </div>
-                                <p className="font-bold text-slate-900">₹ {p.amount}</p>
+                                <p className="font-bold text-slate-900 ml-2">₹ {p.amount}</p>
                             </div>
                         ))}
                     </div>
@@ -49,12 +68,12 @@ export function DashboardView({
 
                 {/* Recent Cooking */}
                 <Card>
-                    <h2 className="text-xl font-bold text-slate-900 mb-4">Recent Cooking Schedule</h2>
+                    <h2 className="text-lg sm:text-xl font-bold text-slate-900 mb-4">Recent Cooking Schedule</h2>
                     <div className="space-y-3">
                         {history.slice(0, 5).map((h) => (
                             <div key={h._id} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-                                <div>
-                                    <p className="font-medium text-slate-900">{h.memberId?.name || 'Unknown'}</p>
+                                <div className="min-w-0 flex-1">
+                                    <p className="font-medium text-slate-900 truncate">{h.memberId?.name || 'Unknown'}</p>
                                     <p className="text-xs text-slate-500">{new Date(h.date).toLocaleDateString()}</p>
                                 </div>
                                 <Badge color="blue">{h.source}</Badge>
@@ -67,8 +86,8 @@ export function DashboardView({
             {/* Full Report Summary */}
             {report && (
                 <Card className="mt-6">
-                    <h2 className="text-xl font-bold text-slate-900 mb-4">Finance Summary</h2>
-                    <div className="grid grid-cols-3 gap-4 mb-6 p-4 bg-slate-50 rounded-lg">
+                    <h2 className="text-lg sm:text-xl font-bold text-slate-900 mb-4">Finance Summary</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 p-4 bg-slate-50 rounded-lg">
                         <div>
                             <p className="text-sm text-slate-600">Total Cost</p>
                             <p className="text-2xl font-bold text-slate-900">₹ {report.totalCost?.toFixed(2)}</p>
@@ -84,24 +103,24 @@ export function DashboardView({
                     </div>
 
                     <div className="overflow-x-auto">
-                        <table className="w-full text-sm">
+                        <table className="w-full text-xs sm:text-sm">
                             <thead className="bg-slate-100 border-b border-slate-200">
                                 <tr>
-                                    <th className="text-left px-4 py-3 font-semibold text-slate-900">Member</th>
-                                    <th className="text-right px-4 py-3 font-semibold text-slate-900">Meals</th>
-                                    <th className="text-right px-4 py-3 font-semibold text-slate-900">Gross</th>
-                                    <th className="text-right px-4 py-3 font-semibold text-slate-900">Adjusted</th>
-                                    <th className="text-right px-4 py-3 font-semibold text-slate-900">Due</th>
+                                    <th className="text-left px-2 sm:px-4 py-3 font-semibold text-slate-900">Member</th>
+                                    <th className="text-right px-2 sm:px-4 py-3 font-semibold text-slate-900">Meals</th>
+                                    <th className="text-right px-2 sm:px-4 py-3 font-semibold text-slate-900">Gross</th>
+                                    <th className="text-right px-2 sm:px-4 py-3 font-semibold text-slate-900">Adjusted</th>
+                                    <th className="text-right px-2 sm:px-4 py-3 font-semibold text-slate-900">Due</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {report.members?.map((row) => (
                                     <tr key={row.memberId} className="border-b border-slate-200 hover:bg-slate-50">
-                                        <td className="px-4 py-3 text-slate-900 font-medium">{row.memberName}</td>
-                                        <td className="px-4 py-3 text-right text-slate-600">{row.meals.toFixed(2)}</td>
-                                        <td className="px-4 py-3 text-right text-slate-600">₹ {row.gross.toFixed(2)}</td>
-                                        <td className="px-4 py-3 text-right text-slate-600">₹ {row.adjusted.toFixed(2)}</td>
-                                        <td className={`px-4 py-3 text-right font-semibold ${row.due >= 0 ? 'text-red-600' : 'text-green-600'}`}>
+                                        <td className="px-2 sm:px-4 py-3 text-slate-900 font-medium truncate">{row.memberName}</td>
+                                        <td className="px-2 sm:px-4 py-3 text-right text-slate-600">{row.meals.toFixed(2)}</td>
+                                        <td className="px-2 sm:px-4 py-3 text-right text-slate-600">₹ {row.gross.toFixed(2)}</td>
+                                        <td className="px-2 sm:px-4 py-3 text-right text-slate-600">₹ {row.adjusted.toFixed(2)}</td>
+                                        <td className={`px-2 sm:px-4 py-3 text-right font-semibold ${row.due >= 0 ? 'text-red-600' : 'text-green-600'}`}>
                                             ₹ {row.due.toFixed(2)}
                                         </td>
                                     </tr>

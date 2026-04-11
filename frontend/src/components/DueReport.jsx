@@ -1,6 +1,7 @@
 import { Card, Header } from './Common';
+import { SkeletonCard, SkeletonTable } from './Skeleton';
 
-export function DueReportView({ report }) {
+export function DueReportView({ report, isLoading }) {
     if (!report) {
         return (
             <div>

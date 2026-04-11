@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Card, Header } from './Common';
+import { SkeletonCard, SkeletonTable } from './Skeleton';
 
-export function AdjustmentsView({ members, adjustments, onAddAdjustment }) {
+export function AdjustmentsView({ members, adjustments, onAddAdjustment, isLoading }) {
     const [form, setForm] = useState({
         date: new Date().toISOString().slice(0, 10),
         memberId: '',

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Card, Header } from './Common';
+import { SkeletonCard, SkeletonTable } from './Skeleton';
 
-export function PurchasesView({ purchases, members, onAddPurchase }) {
+export function PurchasesView({ purchases, members, onAddPurchase, isLoading }) {
     const [form, setForm] = useState({
         date: new Date().toISOString().slice(0, 10),
         description: '',

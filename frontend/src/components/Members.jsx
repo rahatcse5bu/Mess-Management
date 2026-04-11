@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Card, Button, Header } from './Common';
+import { SkeletonTable } from './Skeleton';
 
-export function MembersView({ members, onAddMember, onDeleteMember, onEditMember }) {
+export function MembersView({ members, onAddMember, onDeleteMember, onEditMember, isLoading }) {
     const [form, setForm] = useState({ name: '', email: '', phone: '' });
     const [editingId, setEditingId] = useState(null);
     const [editForm, setEditForm] = useState({ name: '', email: '', phone: '' });
@@ -49,8 +50,8 @@ export function MembersView({ members, onAddMember, onDeleteMember, onEditMember
 
             {/* Add Member Form */}
             <Card className="mb-6">
-                <h2 className="text-xl font-bold text-slate-900 mb-4">Add New Member</h2>
-                <form onSubmit={handleSubmit} className="grid gap-4 md:grid-cols-4">
+                <h2 className="text-lg sm:text-xl font-bold text-slate-900 mb-4">Add New Member</h2>
+                <form onSubmit={handleSubmit} className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                     <input
                         className="px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Full Name"
@@ -77,17 +78,20 @@ export function MembersView({ members, onAddMember, onDeleteMember, onEditMember
 
             {/* Members List */}
             <Card>
-                <h2 className="text-xl font-bold text-slate-900 mb-4">Members List</h2>
+                <h2 className="text-lg sm:text-xl font-bold text-slate-900 mb-4">Members List</h2>
+                {isLoading ? (
+                    <SkeletonTable rows={5} cols={6} />
+                ) : (
                 <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
+                    <table className="w-full text-xs sm:text-sm">
                         <thead className="bg-slate-100 border-b border-slate-200">
                             <tr>
-                                <th className="text-left px-4 py-3 font-semibold text-slate-900">Name</th>
-                                <th className="text-left px-4 py-3 font-semibold text-slate-900">Email</th>
-                                <th className="text-left px-4 py-3 font-semibold text-slate-900">Phone</th>
-                                <th className="text-center px-4 py-3 font-semibold text-slate-900">Cooker</th>
-                                <th className="text-center px-4 py-3 font-semibold text-slate-900">Status</th>
-                                <th className="text-center px-4 py-3 font-semibold text-slate-900">Actions</th>
+                                <th className="text-left px-2 sm:px-4 py-3 font-semibold text-slate-900">Name</th>
+                                <th className="hidden sm:table-cell text-left px-2 sm:px-4 py-3 font-semibold text-slate-900">Email</th>
+                                <th className="hidden md:table-cell text-left px-2 sm:px-4 py-3 font-semibold text-slate-900">Phone</th>
+                                <th className="text-center px-2 sm:px-4 py-3 font-semibold text-slate-900">Cooker</th>
+                                <th className="text-center px-2 sm:px-4 py-3 font-semibold text-slate-900">Status</th>
+                                <th className="text-center px-2 sm:px-4 py-3 font-semibold text-slate-900">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -201,6 +205,7 @@ export function MembersView({ members, onAddMember, onDeleteMember, onEditMember
                         </tbody>
                     </table>
                 </div>
+                )}
             </Card>
         </div>
     );

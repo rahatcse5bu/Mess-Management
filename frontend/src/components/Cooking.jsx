@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Card, Header } from './Common';
+import { SkeletonCard, SkeletonTable } from './Skeleton';
 
-export function CookingView({ members, history, cookForm, upcoming, currentCooker, onSaveConfig, onMoveOrder, onManualAssign, onDeleteHistory }) {
+export function CookingView({ members, history, cookForm, upcoming, currentCooker, onSaveConfig, onMoveOrder, onManualAssign, onDeleteHistory, isLoading }) {
     const [termDays, setTermDays] = useState(cookForm.termDays);
 
     // Manual assign form
