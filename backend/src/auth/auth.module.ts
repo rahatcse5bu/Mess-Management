@@ -1,29 +1,29 @@
-import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
+import { Module, OnModuleInit } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AuthService } from './auth.service';
+import { MongooseModule } from '@nestjs/mongoose';
 import { AuthController } from './auth.controller';
-import { User, UserSchema } from './schemas/user.schema';
+import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
-import { JwtAuthGuard } from './jwt-auth.guard';
+import { User, UserSchema } from './schemas/user.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-    PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET') || 'mess_management_jwt_secret_key_2024_very_secure',
-        signOptions: { expiresIn: configService.get<string>('JWT_EXPIRES_IN') || '7d' },
-      }),
-      inject: [ConfigService],
+    PassportModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || 'mess-management-secret',
+      signOptions: { expiresIn: '7d' },
     }),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
-  providers: [AuthService, JwtStrategy, JwtAuthGuard],
   controllers: [AuthController],
-  exports: [AuthService, JwtAuthGuard],
+  providers: [AuthService, JwtStrategy],
+  exports: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule implements OnModuleInit {
+  constructor(private readonly authService: AuthService) {}
+
+  async onModuleInit() {
+    await this.authService.seedDefaultUser();
+  }
+}

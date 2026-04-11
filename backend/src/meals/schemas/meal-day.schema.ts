@@ -1,34 +1,28 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
-export type MealDayDocument = MealDay & Document;
+export type MealDayDocument = HydratedDocument<MealDay>;
 
 @Schema({ _id: false })
 export class MemberMealEntry {
   @Prop({ type: Types.ObjectId, ref: 'Member', required: true })
   memberId: Types.ObjectId;
 
-  @Prop({ default: 0, min: 0 })
-  breakfast: number;
+  @Prop({ required: true, min: 0 })
+  mealCount: number;
 
   @Prop({ default: 0, min: 0 })
-  lunch: number;
+  guestCount: number;
 
-  @Prop({ default: 0, min: 0 })
-  dinner: number;
-
-  @Prop({ default: 0, min: 0 })
-  totalMeals: number;
-
-  @Prop()
-  note?: string;
+  @Prop({ default: '' })
+  note: string;
 }
 
-export const MemberMealEntrySchema = SchemaFactory.createForClass(MemberMealEntry);
+const MemberMealEntrySchema = SchemaFactory.createForClass(MemberMealEntry);
 
 @Schema({ timestamps: true })
 export class MealDay {
-  @Prop({ required: true, unique: true, type: Date })
+  @Prop({ required: true, unique: true })
   date: Date;
 
   @Prop({ type: [String], default: [] })
@@ -36,15 +30,6 @@ export class MealDay {
 
   @Prop({ type: [MemberMealEntrySchema], default: [] })
   entries: MemberMealEntry[];
-
-  @Prop()
-  notes: string;
-
-  @Prop({ default: false })
-  isLocked: boolean;
 }
 
 export const MealDaySchema = SchemaFactory.createForClass(MealDay);
-
-// Index for faster queries
-MealDaySchema.index({ date: 1 });

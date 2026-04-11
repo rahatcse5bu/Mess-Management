@@ -1,56 +1,24 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
-export type AdjustmentDocument = Adjustment & Document;
-
-export enum AdjustmentType {
-  PAYMENT = 'payment',     // Member paid money
-  CREDIT = 'credit',       // Member receives credit (reduces their due)
-  DEBIT = 'debit',         // Member owes more (increases their due)
-  SETTLEMENT = 'settlement', // Final settlement between members
-}
+export type AdjustmentDocument = HydratedDocument<Adjustment>;
 
 @Schema({ timestamps: true })
 export class Adjustment {
-  @Prop({ required: true, type: Date })
+  @Prop({ required: true })
   date: Date;
 
-  @Prop({ required: true, type: Types.ObjectId, ref: 'Member' })
+  @Prop({ type: Types.ObjectId, ref: 'Member', required: true })
   memberId: Types.ObjectId;
 
   @Prop({ required: true, min: 0 })
   amount: number;
 
-  @Prop({
-    required: true,
-    enum: Object.values(AdjustmentType),
-    default: AdjustmentType.PAYMENT,
-  })
-  type: string;
+  @Prop({ required: true, enum: ['payment', 'credit', 'debit'] })
+  type: 'payment' | 'credit' | 'debit';
 
-  @Prop()
+  @Prop({ default: '' })
   note: string;
-
-  @Prop()
-  referenceId: string;
-
-  @Prop({ type: Types.ObjectId, ref: 'Member' })
-  relatedMemberId: Types.ObjectId;
-
-  @Prop({ default: false })
-  isVoided: boolean;
-
-  @Prop()
-  voidedAt: Date;
-
-  @Prop()
-  voidReason: string;
 }
 
 export const AdjustmentSchema = SchemaFactory.createForClass(Adjustment);
-
-// Indexes
-AdjustmentSchema.index({ date: 1 });
-AdjustmentSchema.index({ memberId: 1 });
-AdjustmentSchema.index({ type: 1 });
-AdjustmentSchema.index({ isVoided: 1 });

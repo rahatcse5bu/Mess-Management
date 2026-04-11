@@ -1,34 +1,18 @@
-# Dependencies
-backend/node_modules/
-frontend/node_modules/
-node_modules/
-
-# Build outputs
-backend/dist/
-frontend/dist/
-build/
-*.log
-
-# Environment variables
+backend/node_modules
+frontend/node_modules
+backend/dist
+frontend/dist
+dist
+coverage
 .env
 .env.local
-.env.production
-backend/.env
-frontend/.env
-
-# IDE
-.vscode/
-.idea/
+.DS_Store
+.idea
+.vscode
+*.log
+*.tmp
+*.bak
 *.swp
 *.swo
-*~
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Vercel
-.vercel
-
-# Misc
-*.tsbuildinfo
+.vite
+node_modules   

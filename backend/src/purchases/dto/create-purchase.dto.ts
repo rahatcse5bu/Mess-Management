@@ -1,10 +1,15 @@
-import { IsString, IsNumber, IsDate, IsOptional, IsArray, IsBoolean, Min } from 'class-validator';
-import { Type } from 'class-transformer';
+import {
+  IsDateString,
+  IsMongoId,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Min,
+} from 'class-validator';
 
 export class CreatePurchaseDto {
-  @Type(() => Date)
-  @IsDate()
-  date: Date;
+  @IsDateString()
+  date: string;
 
   @IsString()
   description: string;
@@ -13,28 +18,15 @@ export class CreatePurchaseDto {
   @Min(0)
   amount: number;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   category?: string;
 
-  @IsString()
   @IsOptional()
+  @IsMongoId()
   paidByMemberId?: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   note?: string;
-
-  @IsArray()
-  @IsString({ each: true })
-  @IsOptional()
-  items?: string[];
-
-  @IsString()
-  @IsOptional()
-  receiptUrl?: string;
-
-  @IsBoolean()
-  @IsOptional()
-  isVerified?: boolean;
 }

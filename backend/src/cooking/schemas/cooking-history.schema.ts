@@ -1,27 +1,23 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
-export type CookingHistoryDocument = CookingHistory & Document;
+export type CookingHistoryDocument = HydratedDocument<CookingHistory>;
 
 @Schema({ timestamps: true })
 export class CookingHistory {
-  @Prop({ required: true, type: Date })
+  @Prop({ required: true })
   date: Date;
 
   @Prop({ type: Types.ObjectId, ref: 'Member', required: true })
   memberId: Types.ObjectId;
 
-  @Prop({ enum: ['auto', 'manual'], default: 'auto' })
-  source: string;
+  @Prop({ default: 'auto', enum: ['auto', 'manual'] })
+  source: 'auto' | 'manual';
 
-  @Prop()
+  @Prop({ default: '' })
   note: string;
-
-  @Prop({ type: Types.ObjectId, ref: 'Member' })
-  swappedWith: Types.ObjectId;
 }
 
-export const CookingHistorySchema = SchemaFactory.createForClass(CookingHistory);
-
-// Unique index for date
+export const CookingHistorySchema =
+  SchemaFactory.createForClass(CookingHistory);
 CookingHistorySchema.index({ date: 1 }, { unique: true });

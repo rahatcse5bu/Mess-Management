@@ -1,11 +1,30 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateMemberDto } from './create-member.dto';
-import { IsDate, IsOptional } from 'class-validator';
-import { Type } from 'class-transformer';
+import {
+  IsBoolean,
+  IsEmail,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
-export class UpdateMemberDto extends PartialType(CreateMemberDto) {
-  @Type(() => Date)
-  @IsDate()
+export class UpdateMemberDto {
   @IsOptional()
-  leftAt?: Date;
+  @IsString()
+  @MinLength(2)
+  name?: string;
+
+  @IsOptional()
+  @IsEmail()
+  email?: string;
+
+  @IsOptional()
+  @IsString()
+  phone?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  isCooker?: boolean;
 }

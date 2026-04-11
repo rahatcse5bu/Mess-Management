@@ -1,56 +1,45 @@
-import { IsArray, IsDate, IsOptional, IsString, ValidateNested, IsNumber, Min, IsBoolean } from 'class-validator';
+import {
+  ArrayMinSize,
+  IsArray,
+  IsDateString,
+  IsMongoId,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Min,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class MemberMealEntryDto {
-  @IsString()
+class MealEntryDto {
+  @IsMongoId()
   memberId: string;
 
   @IsNumber()
   @Min(0)
-  @IsOptional()
-  breakfast?: number;
+  mealCount: number;
 
+  @IsOptional()
   @IsNumber()
   @Min(0)
-  @IsOptional()
-  lunch?: number;
+  guestCount?: number;
 
-  @IsNumber()
-  @Min(0)
   @IsOptional()
-  dinner?: number;
-
-  @IsNumber()
-  @Min(0)
-  @IsOptional()
-  totalMeals?: number;
-
   @IsString()
-  @IsOptional()
   note?: string;
 }
 
 export class UpsertMealDayDto {
-  @Type(() => Date)
-  @IsDate()
-  date: Date;
+  @IsDateString()
+  date: string;
 
   @IsArray()
   @IsString({ each: true })
-  @IsOptional()
-  elements?: string[];
+  elements: string[];
 
   @IsArray()
+  @ArrayMinSize(0)
   @ValidateNested({ each: true })
-  @Type(() => MemberMealEntryDto)
-  @IsOptional()
-  entries?: MemberMealEntryDto[];
-
-  @IsString()
-  @IsOptional()
-  notes?: string;
-
-  @IsBoolean()
-  @IsOptional()
-  isLocked?: boolean;
+  @Type(() => MealEntryDto)
+  entries: MealEntryDto[];
 }

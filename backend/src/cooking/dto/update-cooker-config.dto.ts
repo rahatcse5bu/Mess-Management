@@ -1,28 +1,22 @@
-import { IsNumber, IsArray, IsString, IsDate, IsBoolean, IsOptional, Min } from 'class-validator';
-import { Type } from 'class-transformer';
+import {
+  IsArray,
+  IsDateString,
+  IsMongoId,
+  IsOptional,
+  IsPositive,
+} from 'class-validator';
 
 export class UpdateCookerConfigDto {
-  @IsNumber()
-  @Min(1)
   @IsOptional()
+  @IsPositive()
   termDays?: number;
 
+  @IsOptional()
+  @IsDateString()
+  rotationStartDate?: string;
+
+  @IsOptional()
   @IsArray()
-  @IsString({ each: true })
-  @IsOptional()
+  @IsMongoId({ each: true })
   memberOrder?: string[];
-
-  @Type(() => Date)
-  @IsDate()
-  @IsOptional()
-  rotationStartDate?: Date;
-
-  @IsNumber()
-  @Min(0)
-  @IsOptional()
-  currentIndex?: number;
-
-  @IsBoolean()
-  @IsOptional()
-  autoRotate?: boolean;
 }

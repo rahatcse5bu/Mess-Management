@@ -1,40 +1,29 @@
-import { IsString, IsOptional, IsBoolean, IsEmail, IsNumber, IsDate } from 'class-validator';
-import { Type } from 'class-transformer';
+import {
+  IsBoolean,
+  IsEmail,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
 export class CreateMemberDto {
   @IsString()
+  @MinLength(2)
   name: string;
 
-  @IsEmail()
   @IsOptional()
+  @IsEmail()
   email?: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   phone?: string;
 
-  @IsBoolean()
   @IsOptional()
+  @IsBoolean()
   isActive?: boolean;
 
+  @IsOptional()
   @IsBoolean()
-  @IsOptional()
-  canCook?: boolean;
-
-  @IsNumber()
-  @IsOptional()
-  cookerOrder?: number;
-
-  @Type(() => Date)
-  @IsDate()
-  @IsOptional()
-  joinedAt?: Date;
-
-  @IsString()
-  @IsOptional()
-  avatar?: string;
-
-  @IsString()
-  @IsOptional()
-  notes?: string;
+  isCooker?: boolean;
 }

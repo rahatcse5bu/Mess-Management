@@ -1,19 +1,16 @@
-import { IsString, IsDate, IsOptional } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsDateString, IsMongoId, IsOptional, IsString } from 'class-validator';
 
 export class ManualAssignDto {
-  @Type(() => Date)
-  @IsDate()
-  date: Date;
+  @IsDateString()
+  startDate: string;
 
-  @IsString()
+  @IsDateString()
+  endDate: string;
+
+  @IsMongoId()
   memberId: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   note?: string;
-
-  @IsString()
-  @IsOptional()
-  swappedWith?: string;
 }

@@ -1,31 +1,28 @@
-import { IsString, IsNumber, IsDate, IsOptional, IsEnum, Min } from 'class-validator';
-import { Type } from 'class-transformer';
-import { AdjustmentType } from '../schemas/adjustment.schema';
+import {
+  IsDateString,
+  IsIn,
+  IsMongoId,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Min,
+} from 'class-validator';
 
 export class CreateAdjustmentDto {
-  @Type(() => Date)
-  @IsDate()
-  date: Date;
+  @IsDateString()
+  date: string;
 
-  @IsString()
+  @IsMongoId()
   memberId: string;
 
   @IsNumber()
   @Min(0)
   amount: number;
 
-  @IsEnum(AdjustmentType)
-  type: AdjustmentType;
+  @IsIn(['payment', 'credit', 'debit'])
+  type: 'payment' | 'credit' | 'debit';
 
-  @IsString()
   @IsOptional()
+  @IsString()
   note?: string;
-
-  @IsString()
-  @IsOptional()
-  referenceId?: string;
-
-  @IsString()
-  @IsOptional()
-  relatedMemberId?: string;
 }

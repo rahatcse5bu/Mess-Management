@@ -1,17 +1,16 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Post,
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { PurchasesService } from './purchases.service';
-import { CreatePurchaseDto, UpdatePurchaseDto } from './dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { CreatePurchaseDto } from './dto/create-purchase.dto';
+import { PurchasesService } from './purchases.service';
 
 @Controller('purchases')
 @UseGuards(JwtAuthGuard)
@@ -24,47 +23,8 @@ export class PurchasesController {
   }
 
   @Get()
-  findAll(
-    @Query('from') from?: string,
-    @Query('to') to?: string,
-    @Query('category') category?: string,
-  ) {
-    return this.purchasesService.findAll(from, to, category);
-  }
-
-  @Get('total')
-  getTotalInRange(@Query('from') from: string, @Query('to') to: string) {
-    return this.purchasesService.getTotalInRange(from, to);
-  }
-
-  @Get('summary/category')
-  getSummaryByCategory(@Query('from') from: string, @Query('to') to: string) {
-    return this.purchasesService.getSummaryByCategory(from, to);
-  }
-
-  @Get('summary/member')
-  getSummaryByMember(@Query('from') from: string, @Query('to') to: string) {
-    return this.purchasesService.getSummaryByMember(from, to);
-  }
-
-  @Get('daily-totals')
-  getDailyTotals(@Query('from') from: string, @Query('to') to: string) {
-    return this.purchasesService.getDailyTotals(from, to);
-  }
-
-  @Get('categories')
-  getCategories() {
-    return this.purchasesService.getCategories();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.purchasesService.findOne(id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdatePurchaseDto) {
-    return this.purchasesService.update(id, dto);
+  list(@Query('from') from?: string, @Query('to') to?: string) {
+    return this.purchasesService.list(from, to);
   }
 
   @Delete(':id')

@@ -1,16 +1,16 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
   UseGuards,
-  Query,
 } from '@nestjs/common';
 import { MembersService } from './members.service';
-import { CreateMemberDto, UpdateMemberDto } from './dto';
+import { CreateMemberDto } from './dto/create-member.dto';
+import { UpdateMemberDto } from './dto/update-member.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('members')
@@ -19,18 +19,13 @@ export class MembersController {
   constructor(private readonly membersService: MembersService) {}
 
   @Post()
-  create(@Body() createMemberDto: CreateMemberDto) {
-    return this.membersService.create(createMemberDto);
+  create(@Body() dto: CreateMemberDto) {
+    return this.membersService.create(dto);
   }
 
   @Get()
-  findAll(@Query('includeInactive') includeInactive: boolean) {
-    return this.membersService.findAll(includeInactive);
-  }
-
-  @Get('cookers')
-  getActiveCookers() {
-    return this.membersService.getActiveCookers();
+  findAll() {
+    return this.membersService.findAll();
   }
 
   @Get(':id')
@@ -38,29 +33,9 @@ export class MembersController {
     return this.membersService.findOne(id);
   }
 
-  @Get(':id/stats')
-  getMemberStats(@Param('id') id: string) {
-    return this.membersService.getMemberStats(id);
-  }
-
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMemberDto: UpdateMemberDto) {
-    return this.membersService.update(id, updateMemberDto);
-  }
-
-  @Patch(':id/deactivate')
-  deactivate(@Param('id') id: string) {
-    return this.membersService.deactivate(id);
-  }
-
-  @Patch(':id/reactivate')
-  reactivate(@Param('id') id: string) {
-    return this.membersService.reactivate(id);
-  }
-
-  @Patch('order/update')
-  updateCookerOrder(@Body() body: { memberOrders: { memberId: string; order: number }[] }) {
-    return this.membersService.updateCookerOrder(body.memberOrders);
+  update(@Param('id') id: string, @Body() dto: UpdateMemberDto) {
+    return this.membersService.update(id, dto);
   }
 
   @Delete(':id')

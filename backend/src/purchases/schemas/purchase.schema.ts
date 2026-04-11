@@ -1,14 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
-export type PurchaseDocument = Purchase & Document;
+export type PurchaseDocument = HydratedDocument<Purchase>;
 
 @Schema({ timestamps: true })
 export class Purchase {
-  @Prop({ required: true, type: Date })
+  @Prop({ required: true })
   date: Date;
 
-  @Prop({ required: true, trim: true })
+  @Prop({ required: true })
   description: string;
 
   @Prop({ required: true, min: 0 })
@@ -18,24 +18,10 @@ export class Purchase {
   category: string;
 
   @Prop({ type: Types.ObjectId, ref: 'Member' })
-  paidByMemberId: Types.ObjectId;
+  paidByMemberId?: Types.ObjectId;
 
-  @Prop()
+  @Prop({ default: '' })
   note: string;
-
-  @Prop({ type: [String], default: [] })
-  items: string[];
-
-  @Prop()
-  receiptUrl: string;
-
-  @Prop({ default: false })
-  isVerified: boolean;
 }
 
 export const PurchaseSchema = SchemaFactory.createForClass(Purchase);
-
-// Indexes
-PurchaseSchema.index({ date: 1 });
-PurchaseSchema.index({ category: 1 });
-PurchaseSchema.index({ paidByMemberId: 1 });
