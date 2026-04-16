@@ -3,17 +3,24 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
 
+const normalizeOrigin = (origin: string): string =>
+  origin.trim().replace(/\/$/, '');
+
 const getAllowedOrigins = (value?: string): string[] => {
   const configured = value
     ?.split(',')
-    .map((origin) => origin.trim())
+    .map((origin) => normalizeOrigin(origin))
     .filter(Boolean);
 
   if (configured && configured.length > 0) {
     return configured;
   }
 
-  return ['http://localhost:5173', 'http://127.0.0.1:5173'];
+  return [
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+    'https://messmealcal.vercel.app',
+  ];
 };
 
 async function bootstrap() {
@@ -24,11 +31,16 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: (origin, callback: (err: Error | null, allow: boolean) => void) => {
+    origin: (
+      origin: string | undefined,
+      callback: (err: Error | null, allow: boolean) => void,
+    ) => {
+      const normalizedOrigin = origin ? normalizeOrigin(origin) : undefined;
+
       if (
         !origin ||
         allowedOrigins.includes('*') ||
-        allowedOrigins.includes(origin)
+        (normalizedOrigin ? allowedOrigins.includes(normalizedOrigin) : false)
       ) {
         callback(null, true);
         return;

@@ -1,7 +1,9 @@
-import axios from 'axios';
+import axios from "axios";
 
 export const API_BASE =
-  import.meta.env.VITE_API_BASE || 'http://localhost:3000';
+  import.meta.env.VITE_API_BASE || "http://localhost:3000";
+
+// export const API_BASE = "https://backend-mess.vercel.app";
 
 export const api = (token) =>
   axios.create({
