@@ -264,12 +264,8 @@ function App() {
     };
 
     await runAction(
-      editingPurchaseId
-        ? updatePurchaseMutation
-        : createPurchaseMutation,
-      editingPurchaseId
-        ? { id: editingPurchaseId, payload }
-        : payload,
+      editingPurchaseId ? updatePurchaseMutation : createPurchaseMutation,
+      editingPurchaseId ? { id: editingPurchaseId, payload } : payload,
       () => {
         setPurchaseForm(createPurchaseForm());
         setEditingPurchaseId("");
@@ -280,7 +276,9 @@ function App() {
   const startEditPurchase = (purchase) => {
     setEditingPurchaseId(purchase._id);
     setPurchaseForm({
-      date: purchase.date ? new Date(purchase.date).toISOString().slice(0, 10) : getToday(),
+      date: purchase.date
+        ? new Date(purchase.date).toISOString().slice(0, 10)
+        : getToday(),
       description: purchase.description || "",
       amount:
         purchase.amount !== undefined && purchase.amount !== null
@@ -338,7 +336,9 @@ function App() {
     "Due Report": [dueReportQuery],
   }[activeTab];
 
-  const dashboardError = activeQueries.map((query) => query.error).find(Boolean);
+  const dashboardError = activeQueries
+    .map((query) => query.error)
+    .find(Boolean);
 
   const isDashboardPending = activeQueries.some((query) => query.isPending);
 

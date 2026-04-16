@@ -1,13 +1,13 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { api } from '../api';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { api } from "../api";
 
 export const messQueryKeys = {
-  members: ['members'],
-  cookingConfig: ['cooking', 'config'],
-  cookingHistory: ['cooking', 'history'],
-  purchases: ['purchases'],
-  adjustments: ['adjustments'],
-  dueReport: ['reports', 'due-summary'],
+  members: ["members"],
+  cookingConfig: ["cooking", "config"],
+  cookingHistory: ["cooking", "history"],
+  purchases: ["purchases"],
+  adjustments: ["adjustments"],
+  dueReport: ["reports", "due-summary"],
 };
 
 const dashboardKeys = [
@@ -50,48 +50,48 @@ const useInvalidatingMutation = ({
 export const useLoginMutation = () =>
   useMutation({
     mutationFn: (credentials) =>
-      getData(api().post('/auth/login', credentials)),
+      getData(api().post("/auth/login", credentials)),
   });
 
 export const useMembersQuery = (token, enabled = true) =>
   useQuery({
     queryKey: messQueryKeys.members,
-    queryFn: () => getData(clientFor(token).get('/members')),
+    queryFn: () => getData(clientFor(token).get("/members")),
     enabled: Boolean(token) && enabled,
   });
 
 export const useCookingConfigQuery = (token, enabled = true) =>
   useQuery({
     queryKey: messQueryKeys.cookingConfig,
-    queryFn: () => getData(clientFor(token).get('/cooking/config')),
+    queryFn: () => getData(clientFor(token).get("/cooking/config")),
     enabled: Boolean(token) && enabled,
   });
 
 export const useCookingHistoryQuery = (token, enabled = true) =>
   useQuery({
     queryKey: messQueryKeys.cookingHistory,
-    queryFn: () => getData(clientFor(token).get('/cooking/history')),
+    queryFn: () => getData(clientFor(token).get("/cooking/history")),
     enabled: Boolean(token) && enabled,
   });
 
 export const usePurchasesQuery = (token, enabled = true) =>
   useQuery({
     queryKey: messQueryKeys.purchases,
-    queryFn: () => getData(clientFor(token).get('/purchases')),
+    queryFn: () => getData(clientFor(token).get("/purchases")),
     enabled: Boolean(token) && enabled,
   });
 
 export const useAdjustmentsQuery = (token, enabled = true) =>
   useQuery({
     queryKey: messQueryKeys.adjustments,
-    queryFn: () => getData(clientFor(token).get('/adjustments')),
+    queryFn: () => getData(clientFor(token).get("/adjustments")),
     enabled: Boolean(token) && enabled,
   });
 
 export const useDueReportQuery = (token, enabled = true) =>
   useQuery({
     queryKey: messQueryKeys.dueReport,
-    queryFn: () => getData(clientFor(token).get('/reports/due-summary')),
+    queryFn: () => getData(clientFor(token).get("/reports/due-summary")),
     enabled: Boolean(token) && enabled,
   });
 
@@ -104,7 +104,7 @@ export const useCreateMemberMutation = (token) =>
       messQueryKeys.cookingHistory,
       messQueryKeys.dueReport,
     ],
-    mutationFn: (client, payload) => getData(client.post('/members', payload)),
+    mutationFn: (client, payload) => getData(client.post("/members", payload)),
   });
 
 export const useDeleteMemberMutation = (token) =>
@@ -125,21 +125,23 @@ export const useUpdateCookingConfigMutation = (token) =>
     token,
     invalidate: [messQueryKeys.cookingConfig, messQueryKeys.cookingHistory],
     mutationFn: (client, payload) =>
-      getData(client.patch('/cooking/config', payload)),
+      getData(client.patch("/cooking/config", payload)),
   });
 
 export const useCreateMealDayMutation = (token) =>
   useInvalidatingMutation({
     token,
     invalidate: [messQueryKeys.dueReport],
-    mutationFn: (client, payload) => getData(client.post('/meals/day', payload)),
+    mutationFn: (client, payload) =>
+      getData(client.post("/meals/day", payload)),
   });
 
 export const useCreatePurchaseMutation = (token) =>
   useInvalidatingMutation({
     token,
     invalidate: [messQueryKeys.purchases, messQueryKeys.dueReport],
-    mutationFn: (client, payload) => getData(client.post('/purchases', payload)),
+    mutationFn: (client, payload) =>
+      getData(client.post("/purchases", payload)),
   });
 
 export const useUpdatePurchaseMutation = (token) =>
@@ -155,5 +157,5 @@ export const useCreateAdjustmentMutation = (token) =>
     token,
     invalidate: [messQueryKeys.adjustments, messQueryKeys.dueReport],
     mutationFn: (client, payload) =>
-      getData(client.post('/adjustments', payload)),
+      getData(client.post("/adjustments", payload)),
   });
