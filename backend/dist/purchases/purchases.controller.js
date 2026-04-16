@@ -16,17 +16,21 @@ exports.PurchasesController = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const create_purchase_dto_1 = require("./dto/create-purchase.dto");
+const update_purchase_dto_1 = require("./dto/update-purchase.dto");
 const purchases_service_1 = require("./purchases.service");
 let PurchasesController = class PurchasesController {
     purchasesService;
     constructor(purchasesService) {
         this.purchasesService = purchasesService;
     }
-    create(dto) {
-        return this.purchasesService.create(dto);
+    create(dto, req) {
+        return this.purchasesService.create(dto, req.user.sub);
     }
     list(from, to) {
         return this.purchasesService.list(from, to);
+    }
+    update(id, dto, req) {
+        return this.purchasesService.update(id, dto, req.user.sub);
     }
     remove(id) {
         return this.purchasesService.remove(id);
@@ -36,8 +40,9 @@ exports.PurchasesController = PurchasesController;
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_purchase_dto_1.CreatePurchaseDto]),
+    __metadata("design:paramtypes", [create_purchase_dto_1.CreatePurchaseDto, Object]),
     __metadata("design:returntype", void 0)
 ], PurchasesController.prototype, "create", null);
 __decorate([
@@ -48,6 +53,15 @@ __decorate([
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", void 0)
 ], PurchasesController.prototype, "list", null);
+__decorate([
+    (0, common_1.Patch)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, update_purchase_dto_1.UpdatePurchaseDto, Object]),
+    __metadata("design:returntype", void 0)
+], PurchasesController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),

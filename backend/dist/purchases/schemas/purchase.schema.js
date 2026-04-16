@@ -18,6 +18,8 @@ let Purchase = class Purchase {
     amount;
     category;
     paidByMemberId;
+    addedBy;
+    updatedBy;
     note;
 };
 exports.Purchase = Purchase;
@@ -41,6 +43,14 @@ __decorate([
     (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: 'Member' }),
     __metadata("design:type", mongoose_2.Types.ObjectId)
 ], Purchase.prototype, "paidByMemberId", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: 'User', required: true }),
+    __metadata("design:type", mongoose_2.Types.ObjectId)
+], Purchase.prototype, "addedBy", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: 'User' }),
+    __metadata("design:type", mongoose_2.Types.ObjectId)
+], Purchase.prototype, "updatedBy", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ default: '' }),
     __metadata("design:type", String)

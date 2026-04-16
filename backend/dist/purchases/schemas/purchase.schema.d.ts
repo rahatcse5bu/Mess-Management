@@ -6,6 +6,8 @@ export declare class Purchase {
     amount: number;
     category: string;
     paidByMemberId?: Types.ObjectId;
+    addedBy: Types.ObjectId;
+    updatedBy?: Types.ObjectId;
     note: string;
 }
 export declare const PurchaseSchema: import("mongoose").Schema<Purchase, import("mongoose").Model<Purchase, any, any, any, (import("mongoose").Document<unknown, any, Purchase, any, import("mongoose").DefaultSchemaOptions> & Purchase & {
@@ -64,6 +66,24 @@ export declare const PurchaseSchema: import("mongoose").Schema<Purchase, import(
         id: string;
     }> | undefined;
     paidByMemberId?: import("mongoose").SchemaDefinitionProperty<Types.ObjectId | undefined, Purchase, import("mongoose").Document<unknown, {}, Purchase, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<Purchase & {
+        _id: Types.ObjectId;
+    } & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }> | undefined;
+    addedBy?: import("mongoose").SchemaDefinitionProperty<Types.ObjectId, Purchase, import("mongoose").Document<unknown, {}, Purchase, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<Purchase & {
+        _id: Types.ObjectId;
+    } & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }> | undefined;
+    updatedBy?: import("mongoose").SchemaDefinitionProperty<Types.ObjectId | undefined, Purchase, import("mongoose").Document<unknown, {}, Purchase, {
         id: string;
     }, import("mongoose").DefaultSchemaOptions> & Omit<Purchase & {
         _id: Types.ObjectId;

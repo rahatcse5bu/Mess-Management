@@ -1,4 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
@@ -10,11 +11,22 @@ export class AuthService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async seedDefaultUser(): Promise<void> {
-    const email = 'rahat.cse5.bu@gmail.com';
-    const password = '01783307672@Rahat';
+    const shouldSeed =
+      this.configService.get<string>('SEED_DEFAULT_USER') === 'true';
+
+    if (!shouldSeed) {
+      return;
+    }
+
+    const email = this.configService.getOrThrow<string>('DEFAULT_ADMIN_EMAIL');
+    const password = this.configService.getOrThrow<string>(
+      'DEFAULT_ADMIN_PASSWORD',
+    );
+    const name = this.configService.get<string>('DEFAULT_ADMIN_NAME') || 'Admin';
     const existing = await this.userModel.findOne({ email }).exec();
     if (existing) {
       return;
@@ -24,7 +36,7 @@ export class AuthService {
     await this.userModel.create({
       email,
       passwordHash,
-      name: 'Rahat',
+      name,
     });
   }
 

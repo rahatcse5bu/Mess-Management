@@ -20,6 +20,12 @@ export class Purchase {
   @Prop({ type: Types.ObjectId, ref: 'Member' })
   paidByMemberId?: Types.ObjectId;
 
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  addedBy: Types.ObjectId;
+
+  @Prop({ type: Types.ObjectId, ref: 'User' })
+  updatedBy?: Types.ObjectId;
+
   @Prop({ default: '' })
   note: string;
 }

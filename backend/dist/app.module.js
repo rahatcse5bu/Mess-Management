@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
+const config_1 = require("@nestjs/config");
 const mongoose_1 = require("@nestjs/mongoose");
 const auth_module_1 = require("./auth/auth.module");
 const members_module_1 = require("./members/members.module");
@@ -16,15 +17,24 @@ const meals_module_1 = require("./meals/meals.module");
 const purchases_module_1 = require("./purchases/purchases.module");
 const adjustments_module_1 = require("./adjustments/adjustments.module");
 const reports_module_1 = require("./reports/reports.module");
+const env_validation_1 = require("./config/env.validation");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            mongoose_1.MongooseModule.forRoot(process.env.MONGO_URI ||
-                'mongodb+srv://rahatcse5bu:01783307672Rahat@cluster0.t9xf7li.mongodb.net/', {
-                dbName: process.env.MONGO_DB || 'mess_management',
+            config_1.ConfigModule.forRoot({
+                isGlobal: true,
+                envFilePath: ['.env.local', '.env'],
+                validate: env_validation_1.validateEnv,
+            }),
+            mongoose_1.MongooseModule.forRootAsync({
+                inject: [config_1.ConfigService],
+                useFactory: (configService) => ({
+                    uri: configService.getOrThrow('MONGO_URI'),
+                    dbName: configService.get('MONGO_DB') || 'mess_management',
+                }),
             }),
             auth_module_1.AuthModule,
             members_module_1.MembersModule,

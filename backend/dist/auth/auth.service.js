@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
+const config_1 = require("@nestjs/config");
 const mongoose_1 = require("@nestjs/mongoose");
 const jwt_1 = require("@nestjs/jwt");
 const mongoose_2 = require("mongoose");
@@ -22,13 +23,20 @@ const user_schema_1 = require("./schemas/user.schema");
 let AuthService = class AuthService {
     userModel;
     jwtService;
-    constructor(userModel, jwtService) {
+    configService;
+    constructor(userModel, jwtService, configService) {
         this.userModel = userModel;
         this.jwtService = jwtService;
+        this.configService = configService;
     }
     async seedDefaultUser() {
-        const email = 'rahat.cse5.bu@gmail.com';
-        const password = '01783307672@Rahat';
+        const shouldSeed = this.configService.get('SEED_DEFAULT_USER') === 'true';
+        if (!shouldSeed) {
+            return;
+        }
+        const email = this.configService.getOrThrow('DEFAULT_ADMIN_EMAIL');
+        const password = this.configService.getOrThrow('DEFAULT_ADMIN_PASSWORD');
+        const name = this.configService.get('DEFAULT_ADMIN_NAME') || 'Admin';
         const existing = await this.userModel.findOne({ email }).exec();
         if (existing) {
             return;
@@ -37,7 +45,7 @@ let AuthService = class AuthService {
         await this.userModel.create({
             email,
             passwordHash,
-            name: 'Rahat',
+            name,
         });
     }
     async login(email, password) {
@@ -71,6 +79,7 @@ exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(user_schema_1.User.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
-        jwt_1.JwtService])
+        jwt_1.JwtService,
+        config_1.ConfigService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map
