@@ -103,12 +103,24 @@ function App() {
   const [cookDraft, setCookDraft] = useState(null);
   const [editingPurchaseId, setEditingPurchaseId] = useState("");
 
-  const membersQuery = useMembersQuery(token);
-  const cookingConfigQuery = useCookingConfigQuery(token);
-  const cookingHistoryQuery = useCookingHistoryQuery(token);
-  const purchasesQuery = usePurchasesQuery(token);
-  const adjustmentsQuery = useAdjustmentsQuery(token);
-  const dueReportQuery = useDueReportQuery(token);
+  const shouldLoadMembers = [
+    "Members",
+    "Cooking",
+    "Meals",
+    "Purchases",
+    "Adjustments",
+  ].includes(activeTab);
+  const shouldLoadCooking = activeTab === "Cooking";
+  const shouldLoadPurchases = activeTab === "Purchases";
+  const shouldLoadAdjustments = activeTab === "Adjustments";
+  const shouldLoadDueReport = activeTab === "Due Report";
+
+  const membersQuery = useMembersQuery(token, shouldLoadMembers);
+  const cookingConfigQuery = useCookingConfigQuery(token, shouldLoadCooking);
+  const cookingHistoryQuery = useCookingHistoryQuery(token, shouldLoadCooking);
+  const purchasesQuery = usePurchasesQuery(token, shouldLoadPurchases);
+  const adjustmentsQuery = useAdjustmentsQuery(token, shouldLoadAdjustments);
+  const dueReportQuery = useDueReportQuery(token, shouldLoadDueReport);
 
   const loginMutation = useLoginMutation();
   const createMemberMutation = useCreateMemberMutation(token);
@@ -317,23 +329,18 @@ function App() {
     });
   };
 
-  const dashboardError = [
-    membersQuery.error,
-    cookingConfigQuery.error,
-    cookingHistoryQuery.error,
-    purchasesQuery.error,
-    adjustmentsQuery.error,
-    dueReportQuery.error,
-  ].find(Boolean);
+  const activeQueries = {
+    Members: [membersQuery],
+    Cooking: [membersQuery, cookingConfigQuery, cookingHistoryQuery],
+    Meals: [membersQuery],
+    Purchases: [membersQuery, purchasesQuery],
+    Adjustments: [membersQuery, adjustmentsQuery],
+    "Due Report": [dueReportQuery],
+  }[activeTab];
 
-  const isDashboardPending = [
-    membersQuery.isPending,
-    cookingConfigQuery.isPending,
-    cookingHistoryQuery.isPending,
-    purchasesQuery.isPending,
-    adjustmentsQuery.isPending,
-    dueReportQuery.isPending,
-  ].some(Boolean);
+  const dashboardError = activeQueries.map((query) => query.error).find(Boolean);
+
+  const isDashboardPending = activeQueries.some((query) => query.isPending);
 
   const isAnyActionPending = [
     createMemberMutation.isPending,

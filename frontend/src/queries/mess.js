@@ -53,46 +53,46 @@ export const useLoginMutation = () =>
       getData(api().post('/auth/login', credentials)),
   });
 
-export const useMembersQuery = (token) =>
+export const useMembersQuery = (token, enabled = true) =>
   useQuery({
     queryKey: messQueryKeys.members,
     queryFn: () => getData(clientFor(token).get('/members')),
-    enabled: Boolean(token),
+    enabled: Boolean(token) && enabled,
   });
 
-export const useCookingConfigQuery = (token) =>
+export const useCookingConfigQuery = (token, enabled = true) =>
   useQuery({
     queryKey: messQueryKeys.cookingConfig,
     queryFn: () => getData(clientFor(token).get('/cooking/config')),
-    enabled: Boolean(token),
+    enabled: Boolean(token) && enabled,
   });
 
-export const useCookingHistoryQuery = (token) =>
+export const useCookingHistoryQuery = (token, enabled = true) =>
   useQuery({
     queryKey: messQueryKeys.cookingHistory,
     queryFn: () => getData(clientFor(token).get('/cooking/history')),
-    enabled: Boolean(token),
+    enabled: Boolean(token) && enabled,
   });
 
-export const usePurchasesQuery = (token) =>
+export const usePurchasesQuery = (token, enabled = true) =>
   useQuery({
     queryKey: messQueryKeys.purchases,
     queryFn: () => getData(clientFor(token).get('/purchases')),
-    enabled: Boolean(token),
+    enabled: Boolean(token) && enabled,
   });
 
-export const useAdjustmentsQuery = (token) =>
+export const useAdjustmentsQuery = (token, enabled = true) =>
   useQuery({
     queryKey: messQueryKeys.adjustments,
     queryFn: () => getData(clientFor(token).get('/adjustments')),
-    enabled: Boolean(token),
+    enabled: Boolean(token) && enabled,
   });
 
-export const useDueReportQuery = (token) =>
+export const useDueReportQuery = (token, enabled = true) =>
   useQuery({
     queryKey: messQueryKeys.dueReport,
     queryFn: () => getData(clientFor(token).get('/reports/due-summary')),
-    enabled: Boolean(token),
+    enabled: Boolean(token) && enabled,
   });
 
 export const useCreateMemberMutation = (token) =>
